@@ -34,13 +34,11 @@ void printMatrix(int **matrix) {
 // ex.5
 int valueExists(int **matrix, int value) {
 
-    int linhas=length(matrix);
-    int pid[linhas];
+    int pid[ROWS];
     
-    for(int i=0;i<linhas;i++){
+    for(int i=0;i<ROWS;i++){
         if((pid[i]=fork())==0){
-            int colunas=length(matrix[i]);
-            for(int j=0;j<colunas;j++){
+            for(int j=0;j<COLUMNS;j++){
                 if matrix[i][j]==value{
                     _exit(1);
                 }
@@ -49,7 +47,7 @@ int valueExists(int **matrix, int value) {
         }
     }
 
-    for(int i=0;i<linhas;i++){
+    for(int i=0;i<ROWS;i++){
         int status;
         wait(&status);
         if(WIFEXITED(status) && WEXITSTATUS(status)==1){
@@ -61,18 +59,26 @@ int valueExists(int **matrix, int value) {
     return 0;
 }
 
-
+void bubbleSort(int array[], int size) {
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (array[j] > array[j + 1]) {
+                int temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
+}
 // ex.6
 void linesWithValue(int **matrix, int value) {
 
-    int linhas=length(matrix);
-    int pid[linhas];
-    int values[linhas];
+    int pid[ROWS];
+    int values[ROWS];
     
-    for(int i=0;i<linhas;i++){
+    for(int i=0;i<ROWS;i++){
         if((pid[i]=fork())==0){
-            int colunas=length(matrix[i]);
-            for(int j=0;j<colunas;j++){
+            for(int j=0;j<COLUMNS;j++){
                 if matrix[i][j]==value{
                     _exit(i);
                 }
@@ -81,11 +87,18 @@ void linesWithValue(int **matrix, int value) {
         }
     }
 
-    for(int i=0;i<linhas;i++){
+    for(int i=0;i<ROWS;i++){
+        int total=0;
         int status;
         wait(&status);
         if(WIFEXITED(status) && WEXITSTATUS(status)!=0){
             values[i]=WEXITSTATUS(status);
+            total++;
         }
+        
+    }
+    bubbleSort(values,total);
+    for (int i=0;i<total;i++){
+        printf("%d\n"values[i]);
     }
 }
