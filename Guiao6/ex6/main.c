@@ -38,8 +38,8 @@ int main(int argc, char *argv[]) {
     close(pipefd2[1]);
     // uniq
     if (fork() == 0) {
-        dup2(pipefd2[0], STDIN_FILENO); // Use the read end of pipefd2
-        dup2(pipefd3[1], STDOUT_FILENO); // Use the write end of pipefd3
+        dup2(pipefd2[0], STDIN_FILENO); 
+        dup2(pipefd3[1], STDOUT_FILENO); 
         close(pipefd2[1]);
         close(pipefd3[0]);
         execlp("uniq", "uniq", NULL);
